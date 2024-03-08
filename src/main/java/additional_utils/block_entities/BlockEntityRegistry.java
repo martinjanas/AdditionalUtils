@@ -16,6 +16,6 @@ public class BlockEntityRegistry
 
     public void register()
     {
-        block_entity_stack_counter = mod_block_entities.register("be_healer", () -> BlockEntityType.Builder.of(BlockEntityStackCounter::new, BlockRegistry.stack_counter_block.get()).build(null));
+        block_entity_stack_counter = mod_block_entities.register("be_stack_counter", () -> BlockEntityType.Builder.of(BlockEntityStackCounter::new, BlockRegistry.stack_counter_block.get()).build(null));
     }
 }
