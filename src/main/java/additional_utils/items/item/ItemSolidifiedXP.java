@@ -1,6 +1,6 @@
 package additional_utils.items.item;
 
-import additional_utils.items.ItemRegistry;
+import additional_utils.registry.ItemRegistry;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;

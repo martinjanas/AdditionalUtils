@@ -1,8 +1,8 @@
 package additional_utils.blocks.block;
 
-import additional_utils.block_entities.BlockEntityRegistry;
+import additional_utils.registry.BlockEntityRegistry;
 import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
-import additional_utils.items.BlockItemRegistry;
+import additional_utils.registry.BlockItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -36,14 +36,14 @@ public class BlockStackCounter extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return counter = BlockEntityRegistry.block_entity_stack_counter.get().create(pos, state);
+        return counter = BlockEntityRegistry.be_stack_counter.get().create(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return type == BlockEntityRegistry.block_entity_stack_counter.get() ? BlockEntityStackCounter::tick : null;
+        return type == BlockEntityRegistry.be_stack_counter.get() ? BlockEntityStackCounter::tick : null;
 
         //return EntityBlock.super.getTicker(level, state, type);
     }
@@ -64,7 +64,7 @@ public class BlockStackCounter extends Block implements EntityBlock
     {
         List<ItemStack> item_list = super.getDrops(pState, pParams);
 
-        item_list.add(new ItemStack(BlockItemRegistry.block_stack_counter_item.get()));
+        item_list.add(new ItemStack(BlockItemRegistry.bi_stack_counter.get()));
 
         return item_list;
 
