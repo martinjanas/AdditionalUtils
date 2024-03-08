@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class BlockEntityRegister
+public class BlockEntityRegistry
 {
     public static final DeferredRegister<BlockEntityType<?>> mod_block_entities = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AdditionalUtils.MOD_ID);
 

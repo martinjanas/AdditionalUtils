@@ -1,6 +1,6 @@
 package additional_utils.block_entities.block_entity;
 
-import additional_utils.block_entities.BlockEntityRegister;
+import additional_utils.block_entities.BlockEntityRegistry;
 import additional_utils.blocks.block.BlockStackCounter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +19,7 @@ public class BlockEntityStackCounter extends BlockEntity
 {
     public BlockEntityStackCounter(BlockPos pos, BlockState state)
     {
-        super(BlockEntityRegister.block_entity_stack_counter.get(), pos, state);
+        super(BlockEntityRegistry.block_entity_stack_counter.get(), pos, state);
     }
 
     private int stack_count;
