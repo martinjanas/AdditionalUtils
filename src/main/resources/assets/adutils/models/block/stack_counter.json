@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "additional_utils:block/stack_counter"
+    "all": "adutils:block/stack_counter"
   }
 }

@@ -20,7 +20,7 @@ import java.util.List;
 @Mod(AdditionalUtils.MOD_ID)
 public class AdditionalUtils
 {
-    public static final String MOD_ID = "additional_utils";
+    public static final String MOD_ID = "adutils";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     //TODO: Introduce global event manager?
@@ -33,7 +33,7 @@ public class AdditionalUtils
         bus.addListener(this::common_setup);
         NeoForge.EVENT_BUS.addListener(ItemSolidifiedXP::onEntityDropEvent);
         NeoForge.EVENT_BUS.addListener(BlockEntityStackCounter::onPlayerInteract);
-
+        
         for (ModRegistry registry : mod_registries)
         {
             registry.register();

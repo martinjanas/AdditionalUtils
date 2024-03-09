@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "adutils:solidified_xp"
+    }
+  },
+  "result": {
+    "item": "adutils:healer"
+  }
+}
