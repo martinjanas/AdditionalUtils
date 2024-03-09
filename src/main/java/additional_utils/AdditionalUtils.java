@@ -23,6 +23,8 @@ public class AdditionalUtils
     public static final String MOD_ID = "additional_utils";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    //TODO: Introduce global event manager?
+
     public AdditionalUtils(IEventBus bus)
     {
         List<ModRegistry> mod_registries = List.of(new ItemRegistry(), new BlockRegistry(), new BlockItemRegistry(),

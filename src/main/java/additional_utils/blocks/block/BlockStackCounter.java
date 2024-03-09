@@ -67,7 +67,5 @@ public class BlockStackCounter extends Block implements EntityBlock
         item_list.add(new ItemStack(BlockItemRegistry.bi_stack_counter.get()));
 
         return item_list;
-
-        //return Collections.singletonList(new ItemStack(ItemRegistry.block_stack_counter_item.get()));
     }
 }

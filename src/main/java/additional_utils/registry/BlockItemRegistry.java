@@ -14,8 +14,8 @@ public class BlockItemRegistry implements ModRegistry
     {
         final var mod_items = ItemRegistry.mod_items;
 
-        bi_healer = mod_items.registerSimpleBlockItem("bi_healer", BlockRegistry.healer);
-        bi_stack_counter = mod_items.registerSimpleBlockItem("bi_stack_counter", BlockRegistry.stack_counter);
+        bi_healer = mod_items.registerSimpleBlockItem("healer", BlockRegistry.healer);
+        bi_stack_counter = mod_items.registerSimpleBlockItem("stack_counter", BlockRegistry.stack_counter);
     }
 
     @Override

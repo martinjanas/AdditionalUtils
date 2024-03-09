@@ -19,10 +19,9 @@ public class CreativeTabRegistry implements ModRegistry
     public void register()
     {
         var builder = CreativeModeTab.builder();
-        //builder.title(Component.translatable("itemGroup.creative_tab"));
-        builder.title(Component.literal("Additional Utils"));
+        builder.title(Component.translatable("itemGroup.au_creative_tab"));
         builder.withTabsBefore(CreativeModeTabs.COMBAT);
-        builder.icon(() -> new ItemStack(Items.DIAMOND));
+        builder.icon(() -> new ItemStack(ItemRegistry.solidified_xp.get()));
         builder.displayItems((params, output) -> {
             for (DeferredHolder<Item, ? extends Item> item_stack : ItemRegistry.mod_items.getEntries())
             {
