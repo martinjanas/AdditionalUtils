@@ -45,7 +45,7 @@ public class BlockEntityStackCounter extends BlockEntity
         Player player = level.getPlayerByUUID(block_owner_id);
     }
 
-    private static void OnPlayerInteract(PlayerInteractEvent.RightClickBlock event)
+    public static void OnPlayerInteract(PlayerInteractEvent.RightClickBlock event)
     {
         Level level = event.getLevel();
 
@@ -80,24 +80,12 @@ public class BlockEntityStackCounter extends BlockEntity
         {
             entity.stack_count++;
             stack_in_hand.shrink(1);
-
-            if (true)
-                System.out.printf("Depositing Items, stack_count: %d\n", entity.stack_count);
         }
 
         if (!is_shifting && entity.stack_count > 0)
         {
             entity.stack_count--;
             player.addItem(new ItemStack(Items.DIAMOND, 1));
-
-            if (true)
-                System.out.printf("Withdrawing Items, stack_count: %d\n", entity.stack_count);
         }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerInteract(PlayerInteractEvent.RightClickBlock event)
-    {
-        OnPlayerInteract(event);
     }
 }

@@ -1,12 +1,11 @@
 package additional_utils;
 
+import additional_utils.api.event.ModEventManager;
 import additional_utils.registry.BlockEntityRegistry;
-import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
 import additional_utils.registry.BlockRegistry;
 import additional_utils.registry.CreativeTabRegistry;
 import additional_utils.registry.BlockItemRegistry;
 import additional_utils.registry.ItemRegistry;
-import additional_utils.items.item.ItemSolidifiedXP;
 import additional_utils.registry.impl.ModRegistry;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -23,22 +22,20 @@ public class AdditionalUtils
     public static final String MOD_ID = "adutils";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    //TODO: Introduce global event manager?
-
     public AdditionalUtils(IEventBus bus)
     {
         List<ModRegistry> mod_registries = List.of(new ItemRegistry(), new BlockRegistry(), new BlockItemRegistry(),
                 new BlockEntityRegistry(), new CreativeTabRegistry());
 
         bus.addListener(this::common_setup);
-        NeoForge.EVENT_BUS.addListener(ItemSolidifiedXP::onEntityDropEvent);
-        NeoForge.EVENT_BUS.addListener(BlockEntityStackCounter::onPlayerInteract);
-        
+
         for (ModRegistry registry : mod_registries)
         {
             registry.register();
             registry.register_to_bus(bus);
         }
+
+        NeoForge.EVENT_BUS.register(ModEventManager.class);
     }
 
     private void common_setup(final FMLCommonSetupEvent event)

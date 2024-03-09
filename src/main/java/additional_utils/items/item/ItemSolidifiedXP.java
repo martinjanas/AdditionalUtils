@@ -20,7 +20,7 @@ public class ItemSolidifiedXP extends Item
         super(new Properties().food(new FoodProperties.Builder().alwaysEat().build()));
     }
 
-    private static void OnEntityDropEvent(LivingDropsEvent event)
+    public static void OnEntityDropEvent(LivingDropsEvent event)
     {
         Level level = event.getEntity().getCommandSenderWorld();
 
@@ -39,12 +39,6 @@ public class ItemSolidifiedXP extends Item
 
             event.getDrops().add(new ItemEntity(level, pos.x, pos.y, pos.z, stack));
         }
-    }
-
-    @SubscribeEvent
-    public static void onEntityDropEvent(LivingDropsEvent event)
-    {
-        OnEntityDropEvent(event);
     }
 
     @Override
