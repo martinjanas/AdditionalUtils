@@ -36,7 +36,7 @@ public class AdditionalUtils
         }
 
         NeoForge.EVENT_BUS.register(ModEventManager.class);
-        //This is a test
+        //This string was edited from Github.com via browser
     }
 
     private void common_setup(final FMLCommonSetupEvent event)
