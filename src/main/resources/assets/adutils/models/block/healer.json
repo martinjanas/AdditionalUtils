@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "adutils:block/healer"
+    "down": "adutils:block/healer_top_bot",
+    "east": "adutils:block/healer_side",
+    "north": "adutils:block/healer_top_bot",
+    "south": "adutils:block/healer_top_bot",
+    "up": "adutils:block/healer_top_bot",
+    "particle": "adutils:block/healer_side",
+    "west": "adutils:block/healer_side"
   }
 }
