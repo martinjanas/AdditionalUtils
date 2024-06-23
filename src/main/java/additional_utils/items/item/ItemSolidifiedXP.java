@@ -22,51 +22,51 @@ public class ItemSolidifiedXP extends Item
 
     public static void OnEntityDropEvent(LivingDropsEvent event)
     {
-        Level level = event.getEntity().getCommandSenderWorld();
+        LivingEntity entity = event.getEntity();
+
+        if (entity == null)
+            return;
+
+        Level level = entity.getCommandSenderWorld();
 
         if (level.isClientSide())
             return;
 
-        if (event.getEntity() instanceof Mob mob)
-        {
-            int looting_level = event.getLootingLevel();
+        if (!(event.getEntity() instanceof  Mob mob))
+            return;
 
-            int amount = level.getRandom().nextIntBetweenInclusive(0, looting_level > 0 ? 5 : 3);
+        int looting_level = event.getLootingLevel();
 
-            Vec3 pos = mob.position();
+        int amount = level.getRandom().nextIntBetweenInclusive(0, looting_level > 0 ? 5 : 3);
 
-            ItemStack stack = new ItemStack(ItemRegistry.solidified_xp.asItem(), amount);
+        Vec3 pos = mob.position();
 
-            event.getDrops().add(new ItemEntity(level, pos.x, pos.y, pos.z, stack));
-        }
+        ItemStack stack = new ItemStack(ItemRegistry.solidified_xp.asItem(), amount);
+
+        event.getDrops().add(new ItemEntity(level, pos.x, pos.y, pos.z, stack));
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity)
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living_entity)
     {
-        if (!pLevel.isClientSide())
-        {
-            int base_xp = 8;
+        if (level.isClientSide())
+            return stack;
 
-            if (pLivingEntity instanceof Player player)
-            {
-                if (!player.isCreative())
-                {
-                    if (player.isShiftKeyDown())
-                    {
-                        int xp_to_give = pStack.getCount() * base_xp;
+        if (!(living_entity instanceof Player player))
+            return stack;
 
-                        player.giveExperiencePoints(xp_to_give);
-                        pStack.shrink(pStack.getCount());
-                    }
-                    else
-                    {
-                        player.giveExperiencePoints(base_xp);
-                    }
-                }
-            }
-        }
+        if (player.isCreative())
+            return stack;
 
-        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
+        int base_xp = 8;
+
+        final boolean is_shifting = player.isShiftKeyDown();
+
+        int xp_to_give = is_shifting ? stack.getCount() * base_xp : base_xp;
+
+        player.giveExperiencePoints(xp_to_give);
+        stack.shrink(is_shifting ? stack.getCount() : 1);
+
+        return super.finishUsingItem(stack, level, living_entity);
     }
 }

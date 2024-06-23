@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube",
   "textures": {
     "down": "adutils:block/healer_top_bot",
-    "east": "adutils:block/healer_side",
+    "east": "adutils:block/healer_top_bot",
     "north": "adutils:block/healer_top_bot",
     "south": "adutils:block/healer_top_bot",
     "up": "adutils:block/healer_top_bot",
