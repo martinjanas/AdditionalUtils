@@ -1,8 +1,8 @@
-package additional_utils.registry;
+package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
 import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
-import additional_utils.registry.impl.ModRegistry;
+import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;

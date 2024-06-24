@@ -1,8 +1,8 @@
 package additional_utils.blocks.block;
 
-import additional_utils.registry.BlockEntityRegistry;
+import additional_utils.registries.BlockEntityRegistry;
 import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
-import additional_utils.registry.BlockItemRegistry;
+import additional_utils.registries.BlockItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;

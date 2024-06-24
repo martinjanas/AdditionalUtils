@@ -1,8 +1,8 @@
-package additional_utils.registry;
+package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
 import additional_utils.items.item.ItemSolidifiedXP;
-import additional_utils.registry.impl.ModRegistry;
+import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;

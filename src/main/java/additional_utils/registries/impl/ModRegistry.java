@@ -1,4 +1,4 @@
-package additional_utils.registry.impl;
+package additional_utils.registries.impl;
 
 import net.neoforged.bus.api.IEventBus;
 

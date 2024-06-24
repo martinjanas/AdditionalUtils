@@ -1,9 +1,9 @@
-package additional_utils.registry;
+package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
 import additional_utils.blocks.block.BlockHealer;
 import additional_utils.blocks.block.BlockStackCounter;
-import additional_utils.registry.impl.ModRegistry;
+import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;

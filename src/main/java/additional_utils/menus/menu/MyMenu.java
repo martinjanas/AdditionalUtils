@@ -1,20 +1,12 @@
 package additional_utils.menus.menu;
 
-
-import additional_utils.AdditionalUtils;
-import additional_utils.registry.BlockRegistry;
-import additional_utils.registry.MenuRegistry;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import additional_utils.registries.BlockRegistry;
+import additional_utils.registries.MenuRegistry;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
 
 public class MyMenu extends AbstractContainerMenu
 {
@@ -22,7 +14,6 @@ public class MyMenu extends AbstractContainerMenu
 
     public MyMenu(int containerId, Inventory playerInventory) {
         super(MenuRegistry.my_menu.get(), containerId);
-        System.out.println("Hello from MyMenu()");;
         //containerAccess = ContainerLevelAccess.create(playerInventory.player.level(), pos);
 
         /*IItemHandler itemHandler = playerInventory.player.level().getBlockEntity(pos);
@@ -45,7 +36,7 @@ public class MyMenu extends AbstractContainerMenu
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return stillValid(ContainerLevelAccess.NULL, player, BlockRegistry.healer.get());
     }
 

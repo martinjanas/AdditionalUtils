@@ -1,16 +1,15 @@
 package additional_utils;
 
-import additional_utils.api.event.ModEventManager;
-import additional_utils.menus.menu.MyMenu;
-import additional_utils.registry.*;
-import additional_utils.registry.impl.ModRegistry;
+import additional_utils.api.event.EventManager;
+import additional_utils.registries.*;
+import additional_utils.registries.impl.ModRegistry;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
@@ -29,23 +28,27 @@ public class AdditionalUtils
 
         bus.addListener(this::common_setup);
         bus.addListener(this::client_setup);
+        bus.addListener(this::OnRegisterScreens);
 
         for (ModRegistry registry : mod_registries)
         {
             registry.register();
             registry.register_to_bus(bus);
         }
-        //bus.register(ModEventManager.class);
-        NeoForge.EVENT_BUS.register(ModEventManager.class);
+
+        //NeoForge.EVENT_BUS.register(EventManager.class);
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public void OnRegisterScreens(RegisterMenuScreensEvent event)
+    {
+        event.register(MenuRegistry.my_menu.get(), additional_utils.menus.menu.MyScreen::new);
     }
 
     private void client_setup(final FMLClientSetupEvent event)
     {
-        //event.enqueueWork(() -> MenuScreens.register(MenuRegistry.my_menu.get(),);
 
-        /*event.enqueueWork(() -> {
-            MenuScreens.register(MenuRegistry.my_menu.get(), InventoryScreen);
-        });*/
     }
 
     private void common_setup(final FMLCommonSetupEvent event)

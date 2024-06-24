@@ -1,6 +1,6 @@
 package additional_utils.block_entities.block_entity;
 
-import additional_utils.registry.BlockEntityRegistry;
+import additional_utils.registries.BlockEntityRegistry;
 import additional_utils.blocks.block.BlockStackCounter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -10,7 +10,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.UUID;
@@ -27,7 +26,7 @@ public class BlockEntityStackCounter extends BlockEntity
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T e)
     {
         if (true)
-            return;
+            return; //TODO: ?
 
         if (level.isClientSide())
             return;

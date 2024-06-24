@@ -1,8 +1,7 @@
-package additional_utils.registry;
+package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
-import additional_utils.registry.ItemRegistry;
-import additional_utils.registry.impl.ModRegistry;
+import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
