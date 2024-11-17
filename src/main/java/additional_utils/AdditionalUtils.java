@@ -31,10 +31,7 @@ public class AdditionalUtils
         bus.addListener(this::OnRegisterScreens);
 
         for (ModRegistry registry : mod_registries)
-        {
-            registry.register();
-            registry.register_to_bus(bus);
-        }
+             registry.register(bus);
 
         //NeoForge.EVENT_BUS.register(EventManager.class);
     }

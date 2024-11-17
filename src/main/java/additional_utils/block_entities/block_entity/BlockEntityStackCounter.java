@@ -18,7 +18,7 @@ public class BlockEntityStackCounter extends BlockEntity
 {
     public BlockEntityStackCounter(BlockPos pos, BlockState state)
     {
-        super(BlockEntityRegistry.be_stack_counter.get(), pos, state);
+        super(BlockEntityRegistry.stack_counter.get(), pos, state);
     }
 
     private int stack_count;

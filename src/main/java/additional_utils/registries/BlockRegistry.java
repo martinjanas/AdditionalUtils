@@ -13,20 +13,17 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class BlockRegistry implements ModRegistry
 {
-    public static DeferredRegister.Blocks mod_blocks = DeferredRegister.createBlocks(AdditionalUtils.MOD_ID);
+    public static DeferredRegister.Blocks blocks = DeferredRegister.createBlocks(AdditionalUtils.MOD_ID);
 
     public static DeferredBlock<Block> healer;
     public static DeferredBlock<Block> stack_counter;
 
-    public void register()
-    {
-        healer = mod_blocks.register("healer", () -> new BlockHealer(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-        stack_counter = mod_blocks.register("stack_counter", BlockStackCounter::new);
-    }
-
     @Override
-    public void register_to_bus(IEventBus bus)
+    public void register(IEventBus bus)
     {
-        mod_blocks.register(bus);
+        healer = blocks.register("healer", () -> new BlockHealer(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
+        stack_counter = blocks.register("stack_counter", BlockStackCounter::new);
+
+        blocks.register(bus);
     }
 }

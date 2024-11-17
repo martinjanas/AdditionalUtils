@@ -36,14 +36,14 @@ public class BlockStackCounter extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return counter = BlockEntityRegistry.be_stack_counter.get().create(pos, state);
+        return counter = BlockEntityRegistry.stack_counter.get().create(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return type == BlockEntityRegistry.be_stack_counter.get() ? BlockEntityStackCounter::tick : null;
+        return type == BlockEntityRegistry.stack_counter.get() ? BlockEntityStackCounter::tick : null;
 
         //return EntityBlock.super.getTicker(level, state, type);
     }
@@ -64,7 +64,7 @@ public class BlockStackCounter extends Block implements EntityBlock
     {
         List<ItemStack> item_list = super.getDrops(pState, pParams);
 
-        item_list.add(new ItemStack(BlockItemRegistry.bi_stack_counter.get()));
+        item_list.add(new ItemStack(BlockItemRegistry.stack_counter.get()));
 
         return item_list;
     }

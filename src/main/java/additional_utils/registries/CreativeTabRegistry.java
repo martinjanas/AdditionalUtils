@@ -11,30 +11,27 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CreativeTabRegistry implements ModRegistry
 {
-    public static final DeferredRegister<CreativeModeTab> mod_tabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AdditionalUtils.MOD_ID);
+    public static final DeferredRegister<CreativeModeTab> tabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AdditionalUtils.MOD_ID);
 
     public static DeferredHolder<CreativeModeTab, CreativeModeTab> creative_tab;
 
-    public void register()
+    @Override
+    public void register(IEventBus bus)
     {
         var builder = CreativeModeTab.builder();
         builder.title(Component.translatable("itemGroup.au_creative_tab"));
         builder.withTabsBefore(CreativeModeTabs.COMBAT);
         builder.icon(() -> new ItemStack(ItemRegistry.solidified_xp.get()));
         builder.displayItems((params, output) -> {
-            for (DeferredHolder<Item, ? extends Item> item_stack : ItemRegistry.mod_items.getEntries())
+            for (DeferredHolder<Item, ? extends Item> item_stack : ItemRegistry.items.getEntries())
             {
                 output.accept(item_stack.get());
             }
         });
         CreativeModeTab tab = builder.build();
 
-        creative_tab = mod_tabs.register(AdditionalUtils.MOD_ID.concat("_creative_tab"), () -> tab);
-    }
+        creative_tab = tabs.register(AdditionalUtils.MOD_ID.concat("_creative_tab"), () -> tab);
 
-    @Override
-    public void register_to_bus(IEventBus bus)
-    {
-        mod_tabs.register(bus);
+        tabs.register(bus);
     }
 }

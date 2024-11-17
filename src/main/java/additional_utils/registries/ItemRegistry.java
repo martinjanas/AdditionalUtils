@@ -10,18 +10,15 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ItemRegistry implements ModRegistry
 {
-    public static final DeferredRegister.Items mod_items = DeferredRegister.createItems(AdditionalUtils.MOD_ID);
+    public static final DeferredRegister.Items items = DeferredRegister.createItems(AdditionalUtils.MOD_ID);
 
     public static DeferredItem<Item> solidified_xp;
 
-    public void register()
-    {
-        solidified_xp = mod_items.register("solidified_xp", ItemSolidifiedXP::new);
-    }
-
     @Override
-    public void register_to_bus(IEventBus bus)
+    public void register(IEventBus bus)
     {
-        mod_items.register(bus);
+        solidified_xp = items.register("solidified_xp", ItemSolidifiedXP::new);
+
+        items.register(bus);
     }
 }

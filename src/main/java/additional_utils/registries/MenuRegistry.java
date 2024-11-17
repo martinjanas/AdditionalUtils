@@ -12,20 +12,16 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class MenuRegistry implements ModRegistry
 {
-    public static final DeferredRegister<MenuType<?>> mod_menus = DeferredRegister.create(BuiltInRegistries.MENU, AdditionalUtils.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> menus = DeferredRegister.create(BuiltInRegistries.MENU, AdditionalUtils.MOD_ID);
 
     public static DeferredHolder<MenuType<?>, MenuType<MyMenu>> my_menu;
 
     @Override
-    public void register()
+    public void register(IEventBus bus)
     {
-        //my_menu = mod_menus.register("my_menu", () -> IMenuTypeExtension.create(MyMenu::new));
-        my_menu = mod_menus.register("my_menu", () -> new MenuType<>(MyMenu::new, FeatureFlags.DEFAULT_FLAGS));
-    }
+        //my_menu = menus.register("my_menu", () -> IMenuTypeExtension.create(MyMenu::new));
+        my_menu = menus.register("my_menu", () -> new MenuType<>(MyMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
-    @Override
-    public void register_to_bus(IEventBus bus)
-    {
-        mod_menus.register(bus);
+        menus.register(bus);
     }
 }

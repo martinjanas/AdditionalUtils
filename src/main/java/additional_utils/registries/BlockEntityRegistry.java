@@ -11,18 +11,15 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class BlockEntityRegistry implements ModRegistry
 {
-    public static final DeferredRegister<BlockEntityType<?>> mod_block_entities = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AdditionalUtils.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> block_entities = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AdditionalUtils.MOD_ID);
 
-    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityStackCounter>> be_stack_counter;
-
-    public void register()
-    {
-        be_stack_counter = mod_block_entities.register("be_stack_counter", () -> BlockEntityType.Builder.of(BlockEntityStackCounter::new, BlockRegistry.stack_counter.get()).build(null));
-    }
+    public static DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityStackCounter>> stack_counter;
 
     @Override
-    public void register_to_bus(IEventBus bus)
+    public void register(IEventBus bus)
     {
-        mod_block_entities.register(bus);
+        stack_counter = block_entities.register("stack_counter", () -> BlockEntityType.Builder.of(BlockEntityStackCounter::new, BlockRegistry.stack_counter.get()).build(null));
+        
+        block_entities.register(bus);
     }
 }
