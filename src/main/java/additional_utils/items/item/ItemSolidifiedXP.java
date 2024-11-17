@@ -22,7 +22,6 @@ public class ItemSolidifiedXP extends Item
     public static void OnEntityDropEvent(LivingDropsEvent event)
     {
         LivingEntity entity = event.getEntity();
-
         if (entity == null)
             return;
 

@@ -1,19 +1,12 @@
 package additional_utils.menus.menu;
 
-import additional_utils.blocks.block.BlockHealer;
 import additional_utils.registries.BlockRegistry;
 import additional_utils.registries.MenuRegistry;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class MyMenu extends AbstractContainerMenu
@@ -24,7 +17,6 @@ public class MyMenu extends AbstractContainerMenu
     {
         super(MenuRegistry.my_menu.get(), containerId);
 
-        // Create a temporary inventory with 9 slots
         this.tempInventory = new SimpleContainer(9);
 
         // Add custom slots for the temporary inventory

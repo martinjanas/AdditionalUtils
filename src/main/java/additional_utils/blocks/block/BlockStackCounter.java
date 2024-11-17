@@ -4,9 +4,14 @@ import additional_utils.registries.BlockEntityRegistry;
 import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
 import additional_utils.registries.BlockItemRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,29 +19,29 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class BlockStackCounter extends Block implements EntityBlock
 {
-    public BlockEntityStackCounter counter;
-
     @Nullable
     public UUID block_owner_uuid = null;
 
     public BlockStackCounter()
     {
-        super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
+        super(BlockBehaviour.Properties.of().strength(50.0f, 1200.0f));
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return counter = BlockEntityRegistry.stack_counter.get().create(pos, state);
+        return BlockEntityRegistry.stack_counter.get().create(pos, state);
     }
 
     @Nullable
@@ -60,6 +65,14 @@ public class BlockStackCounter extends Block implements EntityBlock
     }
 
     @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
+    {
+        block_owner_uuid = null;
+
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams)
     {
         List<ItemStack> item_list = super.getDrops(pState, pParams);
@@ -67,5 +80,11 @@ public class BlockStackCounter extends Block implements EntityBlock
         item_list.add(new ItemStack(BlockItemRegistry.stack_counter.get()));
 
         return item_list;
+    }
+
+    @Override
+    public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pLevel, BlockPos pPos)
+    {
+        return 0.0f;
     }
 }
