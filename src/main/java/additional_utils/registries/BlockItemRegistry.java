@@ -11,6 +11,7 @@ public class BlockItemRegistry implements ModRegistry
 {
     public static DeferredItem<BlockItem> healer;
     public static DeferredItem<BlockItem> stack_counter;
+    public static DeferredItem<BlockItem> crafter;
 
     @Override
     public void register(IEventBus bus)
@@ -19,5 +20,6 @@ public class BlockItemRegistry implements ModRegistry
 
         healer = items.registerSimpleBlockItem("healer", BlockRegistry.healer);
         stack_counter = items.registerSimpleBlockItem("stack_counter", BlockRegistry.stack_counter);
+        crafter = items.registerSimpleBlockItem("crafter", BlockRegistry.crafter);
     }
 }

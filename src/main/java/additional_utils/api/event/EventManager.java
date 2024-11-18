@@ -1,6 +1,7 @@
 package additional_utils.api.event;
 
 import additional_utils.AdditionalUtils;
+import additional_utils.block_entities.block_entity.BlockEntityCrafter;
 import additional_utils.block_entities.block_entity.BlockEntityStackCounter;
 import additional_utils.items.item.ItemSolidifiedXP;
 import net.minecraft.world.InteractionResult;
@@ -34,6 +35,12 @@ public class EventManager
         BlockEntity blockEntity = level.getBlockEntity(event.getPos());
         if (blockEntity instanceof BlockEntityStackCounter entity)
             entity.insert_item(event.getEntity(), event.getHand());
+
+        if (blockEntity instanceof BlockEntityCrafter entity)
+            entity.insert_items(event.getEntity(), event.getHand());
+
+        if (blockEntity instanceof BlockEntityCrafter entity)
+            entity.retrieve_crafted_item(event.getEntity(), event.getHand());
     }
 
     @SuppressWarnings("unused")
