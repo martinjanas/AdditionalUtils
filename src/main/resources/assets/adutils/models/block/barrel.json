@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "adutils:block/stack_counter"
+    "all": "adutils:block/barrel"
   }
 }

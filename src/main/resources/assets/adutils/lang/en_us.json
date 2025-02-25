@@ -1,7 +1,7 @@
 {
   "item.adutils.solidified_xp":  "Solidified XP",
   "block.adutils.healer": "Healer",
-  "block.adutils.stack_counter": "Stack Counter",
   "block.adutils.crafter": "Crafter",
+  "block.adutils.barrel": "Barrel",
   "itemGroup.au_creative_tab": "Additional Utils"
 }

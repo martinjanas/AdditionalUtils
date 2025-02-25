@@ -1,5 +1,6 @@
 package additional_utils.menus.menu.impl;
 
+import additional_utils.api.slot.BarrelSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -10,20 +11,18 @@ import net.minecraft.world.item.ItemStack;
 
 public abstract class BasicMenu extends AbstractContainerMenu
 {
-    private final SimpleContainer blockInventory;
     private final int inventorySize;
 
     public BasicMenu(MenuType<? extends AbstractContainerMenu> menuType, int containerId, Inventory playerInventory, SimpleContainer blockInventory)
     {
         super(menuType, containerId);
-        this.blockInventory = blockInventory;
         this.inventorySize = blockInventory.getContainerSize();
 
         // Add block inventory slots
         int startX = 8;
         int startY = 18;
         for (int i = 0; i < inventorySize; i++) {
-            this.addSlot(new Slot(blockInventory, i, startX + (i * 18), startY));
+            this.addSlot(new BarrelSlot(blockInventory, i, startX + (i * 18), startY, 128));
         }
 
         // Add player inventory slots
@@ -31,7 +30,8 @@ public abstract class BasicMenu extends AbstractContainerMenu
     }
 
     // Add player inventory
-    private void addPlayerInventory(Inventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory)
+    {
         int startX = 8;
         int startY = 84;
 
@@ -50,29 +50,28 @@ public abstract class BasicMenu extends AbstractContainerMenu
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public ItemStack quickMoveStack(Player player, int index)
+    {
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot != null && slot.hasItem())
+        {
             ItemStack originalStack = slot.getItem();
             ItemStack copiedStack = originalStack.copy();
 
-            if (index < inventorySize) {
+            if (index < inventorySize)
+            {
                 // Move from block inventory to player inventory
-                if (!this.moveItemStackTo(originalStack, inventorySize, this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, inventorySize, this.slots.size(), true))
                     return ItemStack.EMPTY;
-                }
             } else {
                 // Move from player inventory to block inventory
-                if (!this.moveItemStackTo(originalStack, 0, inventorySize, false)) {
+                if (!this.moveItemStackTo(originalStack, 0, inventorySize, false))
                     return ItemStack.EMPTY;
-                }
             }
 
-            if (originalStack.isEmpty()) {
+            if (originalStack.isEmpty())
                 slot.set(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
+            else slot.setChanged(); // Notify slot that the item changed
 
             return copiedStack;
         }

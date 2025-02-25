@@ -1,6 +1,6 @@
 package additional_utils.block_entities.block_entity;
 
-import additional_utils.menus.menu.CrafterMenu;
+import additional_utils.menus.menu.crafter.CrafterMenu;
 import additional_utils.registries.BlockEntityRegistry;
 import additional_utils.registries.RecipeRegistry;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,6 @@ public class BlockEntityCrafter extends BlockEntity implements MenuProvider
 
         ListTag inventoryList = new ListTag();
 
-        // Loop through each slot in the NonNullList
         for (int i = 0; i < inventory.getContainerSize(); i++)
         {
             ItemStack stack = inventory.getItem(i);
@@ -51,7 +50,7 @@ public class BlockEntityCrafter extends BlockEntity implements MenuProvider
             }
         }
 
-        tag.put("inv", inventoryList);
+        tag.put("crafter_inventory", inventoryList);
 
         setChanged();
     }
@@ -61,11 +60,10 @@ public class BlockEntityCrafter extends BlockEntity implements MenuProvider
     {
         super.load(tag);
 
-        if (tag.contains("inv", Tag.TAG_LIST))
+        if (tag.contains("crafter_inventory", Tag.TAG_LIST))
         {
-            ListTag inventoryList = tag.getList("inv", Tag.TAG_COMPOUND);
+            ListTag inventoryList = tag.getList("crafter_inventory", Tag.TAG_COMPOUND);
 
-            // Loop through the loaded item list and restore them to the NonNullList
             for (int i = 0; i < Math.min(inventoryList.size(), inventory.getContainerSize()); i++)
             {
                 CompoundTag itemTag = inventoryList.getCompound(i);

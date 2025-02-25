@@ -10,8 +10,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class BlockItemRegistry implements ModRegistry
 {
     public static DeferredItem<BlockItem> healer;
-    public static DeferredItem<BlockItem> stack_counter;
     public static DeferredItem<BlockItem> crafter;
+    public static DeferredItem<BlockItem> barrel;
 
     @Override
     public void register(IEventBus bus)
@@ -19,7 +19,7 @@ public class BlockItemRegistry implements ModRegistry
         var items = ItemRegistry.items;
 
         healer = items.registerSimpleBlockItem("healer", BlockRegistry.healer);
-        stack_counter = items.registerSimpleBlockItem("stack_counter", BlockRegistry.stack_counter);
         crafter = items.registerSimpleBlockItem("crafter", BlockRegistry.crafter);
+        barrel = items.registerSimpleBlockItem("barrel", BlockRegistry.barrel);
     }
 }

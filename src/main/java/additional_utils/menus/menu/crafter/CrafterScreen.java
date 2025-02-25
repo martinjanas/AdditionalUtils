@@ -1,4 +1,4 @@
-package additional_utils.menus.menu;
+package additional_utils.menus.menu.crafter;
 
 import additional_utils.menus.menu.impl.BasicScreen;
 import net.minecraft.network.chat.Component;

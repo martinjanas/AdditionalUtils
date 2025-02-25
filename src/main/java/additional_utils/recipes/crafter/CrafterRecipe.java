@@ -1,8 +1,8 @@
-package additional_utils.recipes;
+package additional_utils.recipes.crafter;
 
-import additional_utils.recipes.serializers.CrafterSerializer;
 import additional_utils.registries.RecipeRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,17 +16,22 @@ public class CrafterRecipe implements Recipe<Container>
     public final Ingredient input1;
     public final Ingredient input2;
     public final ItemStack output;
+    public final ResourceLocation id;
 
-    public CrafterRecipe(Ingredient input1, Ingredient input2, ItemStack output)
+    public CrafterRecipe(Ingredient input1, Ingredient input2, ItemStack output, ResourceLocation id)
     {
         this.input1 = input1;
         this.input2 = input2;
         this.output = output;
+        this.id = id;
     }
 
     @Override
     public boolean matches(Container container, Level level)
     {
+        if (level.isClientSide())
+            return false;
+
         return input1.test(container.getItem(0)) && input2.test(container.getItem(1));
     }
 
@@ -51,7 +56,7 @@ public class CrafterRecipe implements Recipe<Container>
     @Override
     public RecipeSerializer<?> getSerializer()
     {
-        return CrafterSerializer.INSTANCE;
+        return RecipeRegistry.crafter_serializer.get();
     }
 
     @Override

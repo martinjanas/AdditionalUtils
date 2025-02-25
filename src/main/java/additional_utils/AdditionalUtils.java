@@ -1,6 +1,7 @@
 package additional_utils;
 
-import additional_utils.api.event.EventManager;
+import additional_utils.menus.menu.barrel.BarrelScreen;
+import additional_utils.menus.menu.crafter.CrafterScreen;
 import additional_utils.registries.*;
 import additional_utils.registries.impl.ModRegistry;
 import com.mojang.logging.LogUtils;
@@ -10,7 +11,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -40,8 +40,8 @@ public class AdditionalUtils
     @SubscribeEvent
     public void OnRegisterScreens(RegisterMenuScreensEvent event)
     {
-        event.register(MenuRegistry.my_menu.get(), additional_utils.menus.menu.MyScreen::new);
-        event.register(MenuRegistry.crafter_menu.get(), additional_utils.menus.menu.CrafterScreen::new);
+        event.register(MenuRegistry.crafter_menu.get(), CrafterScreen::new);
+        event.register(MenuRegistry.barrel_menu.get(), BarrelScreen::new);
     }
 
     private void client_setup(final FMLClientSetupEvent event)

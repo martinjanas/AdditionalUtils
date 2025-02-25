@@ -1,8 +1,8 @@
 package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
-import additional_utils.recipes.CrafterRecipe;
-import additional_utils.recipes.serializers.CrafterSerializer;
+import additional_utils.recipes.crafter.CrafterRecipe;
+import additional_utils.recipes.crafter.CrafterSerializer;
 import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -11,8 +11,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.function.Supplier;
 
 public class RecipeRegistry implements ModRegistry
 {

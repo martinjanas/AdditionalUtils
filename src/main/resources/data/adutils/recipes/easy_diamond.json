@@ -1,5 +1,6 @@
 {
   "type": "adutils:crafter",
+  "id": "easy_diamond",
   "input1": {
     "item": "minecraft:iron_ingot"
   },
