@@ -11,26 +11,30 @@ import org.jetbrains.annotations.NotNull;
 
 public class MyMenu extends AbstractContainerMenu
 {
-    private final SimpleContainer tempInventory;
+    private final SimpleContainer block_inventory;
+    private final int inventory_size;
 
-    public MyMenu(int containerId, Inventory playerInventory)
+    public MyMenu(int containerId, Inventory playerInventory, SimpleContainer block_inventory)
     {
         super(MenuRegistry.my_menu.get(), containerId);
 
-        this.tempInventory = new SimpleContainer(9);
+        this.block_inventory = block_inventory;
+        this.inventory_size = block_inventory.getContainerSize();
 
         // Add custom slots for the temporary inventory
         int startX = 8;
         int startY = 18;
-        for (int i = 0; i < tempInventory.getContainerSize(); i++) {
-            this.addSlot(new Slot(tempInventory, i, startX + (i * 18), startY));
+        for (int i = 0; i < inventory_size; i++)
+        {
+            this.addSlot(new Slot(block_inventory, i, startX + (i * 18), startY));
         }
 
         // Add player inventory slots
         addPlayerInventory(playerInventory);
     }
 
-    private void addPlayerInventory(Inventory playerInventory) {
+    private void addPlayerInventory(Inventory playerInventory)
+    {
         int startX = 8; // Starting x position for the inventory
         int startY = 84; // Starting y position for the inventory
 
@@ -62,14 +66,14 @@ public class MyMenu extends AbstractContainerMenu
             ItemStack originalStack = slot.getItem();
             ItemStack copiedStack = originalStack.copy();
 
-            if (index < tempInventory.getContainerSize()) {
+            if (index < inventory_size) {
                 // Move from block inventory to player inventory
-                if (!this.moveItemStackTo(originalStack, tempInventory.getContainerSize(), this.slots.size(), true)) {
+                if (!this.moveItemStackTo(originalStack, inventory_size, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else {
                 // Move from player inventory to block inventory
-                if (!this.moveItemStackTo(originalStack, 0, tempInventory.getContainerSize(), false)) {
+                if (!this.moveItemStackTo(originalStack, 0, inventory_size, false)) {
                     return ItemStack.EMPTY;
                 }
             }

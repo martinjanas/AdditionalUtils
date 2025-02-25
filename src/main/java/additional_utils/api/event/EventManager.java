@@ -35,12 +35,6 @@ public class EventManager
         BlockEntity blockEntity = level.getBlockEntity(event.getPos());
         if (blockEntity instanceof BlockEntityStackCounter entity)
             entity.insert_item(event.getEntity(), event.getHand());
-
-        if (blockEntity instanceof BlockEntityCrafter entity)
-            entity.insert_items(event.getEntity(), event.getHand());
-
-        if (blockEntity instanceof BlockEntityCrafter entity)
-            entity.retrieve_crafted_item(event.getEntity(), event.getHand());
     }
 
     @SuppressWarnings("unused")

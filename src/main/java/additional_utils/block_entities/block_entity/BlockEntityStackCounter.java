@@ -22,6 +22,7 @@ public class BlockEntityStackCounter extends BlockEntity
 {
     private SimpleContainer inv;
 
+    //This currently acts like a barrel kind of blockentity - used to insert and retrieve items in it
     public BlockEntityStackCounter(BlockPos pos, BlockState state)
     {
         super(BlockEntityRegistry.stack_counter.get(), pos, state);

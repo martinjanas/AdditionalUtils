@@ -24,7 +24,7 @@ public class AdditionalUtils
     public AdditionalUtils(IEventBus bus)
     {
         List<ModRegistry> mod_registries = List.of(new ItemRegistry(), new BlockRegistry(), new BlockItemRegistry(),
-                new BlockEntityRegistry(), new CreativeTabRegistry(), new MenuRegistry());
+                new BlockEntityRegistry(), new CreativeTabRegistry(), new MenuRegistry(), new RecipeRegistry());
 
         bus.addListener(this::common_setup);
         bus.addListener(this::client_setup);
@@ -41,6 +41,7 @@ public class AdditionalUtils
     public void OnRegisterScreens(RegisterMenuScreensEvent event)
     {
         event.register(MenuRegistry.my_menu.get(), additional_utils.menus.menu.MyScreen::new);
+        event.register(MenuRegistry.crafter_menu.get(), additional_utils.menus.menu.CrafterScreen::new);
     }
 
     private void client_setup(final FMLClientSetupEvent event)

@@ -1,0 +1,14 @@
+{
+  "type": "adutils:crafter",
+  "input1": {
+    "item": "minecraft:iron_ingot"
+  },
+  "input2": {
+    "item": "minecraft:iron_ingot"
+  },
+  "output": {
+    "id": "minecraft:gold_ingot",
+    "count": 1,
+    "Count": 1
+  }
+}
