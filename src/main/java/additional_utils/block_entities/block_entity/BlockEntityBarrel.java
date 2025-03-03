@@ -7,7 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,14 +19,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockEntityBarrel extends BlockEntity implements MenuProvider
 {
     public static int MAX_DEFAULT_STACK_SIZE = 512;
-    public BarrelContainer inventory = new BarrelContainer(MAX_DEFAULT_STACK_SIZE);
+    public BarrelContainer b_inventory = new BarrelContainer(MAX_DEFAULT_STACK_SIZE);
+
+    public ItemStackHandler inventory = new ItemStackHandler(1)
+    {
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            super.onContentsChanged(slot);
+
+            if (level != null && !level.isClientSide())
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
+    };
 
     public BlockEntityBarrel(BlockPos pPos, BlockState pBlockState)
     {
@@ -42,15 +60,19 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
             return;
 
         // Get the slot where the item is going to be added
-        ItemStack slotStack = inventory.getItem(0);
-        int maxStack = inventory.getMaxStackSize();
+//        ItemStack slotStack = inventory.getItem(0);
+//        int maxStack = inventory.getMaxStackSize();
+
+        ItemStack slotStack = inventory.getStackInSlot(0);
+        int maxStack = inventory.getSlotLimit(0);
 
         // If the slot is empty, add the held item to the slot
         if (slotStack.isEmpty())
         {
             ItemStack newStack = heldItem.copy();
             newStack.setCount(Math.min(heldItem.getCount(), maxStack));
-            inventory.setItem(0, newStack);
+            //inventory.setItem(0, newStack);
+            inventory.setStackInSlot(0, newStack);
             heldItem.shrink(newStack.getCount());
         }
         else if (ItemStack.isSameItemSameTags(slotStack, heldItem) && slotStack.getCount() < maxStack)
@@ -68,7 +90,7 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
         }
 
         // Mark the block entity as changed
-        inventory.setChanged();
+        //inventory.setChanged();
         setChanged();
     }
 
@@ -81,7 +103,8 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
         ListTag inventoryList = new ListTag();
 
         // Get the item stack from the barrel inventory
-        ItemStack stack = inventory.getItem(0);
+        //ItemStack stack = inventory.getItem(0);
+        ItemStack stack = inventory.getStackInSlot(0);
         if (!stack.isEmpty())
         {
             // Create a new tag to save the item stack data
@@ -121,7 +144,8 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
                 stack.setCount(itemTag.getInt("Count"));
 
                 // Set the item stack in the inventory (slot 0)
-                inventory.setItem(0, stack);
+                //inventory.setItem(0, stack);
+                inventory.setStackInSlot(0, stack);
             }
         }
 
@@ -137,12 +161,12 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     @Override
     public @Nullable AbstractContainerMenu createMenu(int id, Inventory player_inventory, Player player)
     {
-        return new BarrelMenu(id, player_inventory, inventory);
+        return new BarrelMenu(id, player_inventory, b_inventory);
     }
 
     public ItemStack getDisplayedItem()
     {
-        return inventory.getItem(0);
+        return inventory.getStackInSlot(0);//inventory.getItem(0);
     }
 
     @Override
@@ -161,10 +185,15 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public void setChanged()
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket()
     {
-        super.setChanged();
-        requestModelDataUpdate(); // Tell client to refresh rendering
+        //return super.getUpdatePacket();
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    {
+        super.onDataPacket(net, pkt);
+    }
 }
