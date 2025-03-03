@@ -29,9 +29,9 @@ public class EventManager
         if (level.isClientSide())
             return;
 
-        BlockEntity block_entity = level.getBlockEntity(event.getPos());
-        if (block_entity instanceof BlockEntityBarrel barrel)
-            barrel.OnPlayerRightClick(event);
+//        BlockEntity block_entity = level.getBlockEntity(event.getPos());
+//        if (block_entity instanceof BlockEntityBarrel barrel)
+//            barrel.OnPlayerRightClick(event);
     }
 
     @SuppressWarnings("unused")

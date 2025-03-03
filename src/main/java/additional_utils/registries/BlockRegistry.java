@@ -25,7 +25,7 @@ public class BlockRegistry implements ModRegistry
     {
         healer = blocks.register("healer", () -> new BlockHealer(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
         crafter = blocks.register("crafter", () -> new BlockCrafter(BlockBehaviour.Properties.of().strength(50f, 1200f)));
-        barrel = blocks.register("barrel", () -> new BlockBarrel(BlockBehaviour.Properties.of().strength(50f, 1200f)));
+        barrel = blocks.register("barrel", () -> new BlockBarrel(BlockBehaviour.Properties.of().strength(1f, 1200f)));
 
         blocks.register(bus);
     }

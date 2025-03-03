@@ -22,7 +22,7 @@ public abstract class BasicMenu extends AbstractContainerMenu
         int startX = 8;
         int startY = 18;
         for (int i = 0; i < inventorySize; i++) {
-            this.addSlot(new BarrelSlot(blockInventory, i, startX + (i * 18), startY, 128));
+            this.addSlot(new Slot(blockInventory, i, startX + (i * 18), startY));
         }
 
         // Add player inventory slots

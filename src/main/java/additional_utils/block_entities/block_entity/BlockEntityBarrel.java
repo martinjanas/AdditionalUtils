@@ -1,6 +1,6 @@
 package additional_utils.block_entities.block_entity;
 
-import additional_utils.api.inventory_containers.CustomSimpleContainer;
+import additional_utils.api.inventory_containers.BarrelContainer;
 import additional_utils.menus.menu.barrel.BarrelMenu;
 import additional_utils.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -16,60 +17,59 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockEntityBarrel extends BlockEntity implements MenuProvider
 {
-    public final CustomSimpleContainer inventory = new CustomSimpleContainer(1, 128);
+    public static int MAX_DEFAULT_STACK_SIZE = 512;
+    public BarrelContainer inventory = new BarrelContainer(MAX_DEFAULT_STACK_SIZE);
 
     public BlockEntityBarrel(BlockPos pPos, BlockState pBlockState)
     {
         super(BlockEntityRegistry.barrel.get(), pPos, pBlockState);
     }
 
-    public void OnPlayerRightClick(PlayerInteractEvent.RightClickBlock event)
+    public void OnPlayerRightClick(Level level, Player player, InteractionHand hand, BlockState state, BlockPos pos)
     {
-        Level level = event.getLevel();
-        Player player = event.getEntity();
-        ItemStack heldItem = player.getItemInHand(event.getHand());
+        if (level.isClientSide())
+            return;
 
+        // Get the player and the item in their hand
+        ItemStack heldItem = player.getItemInHand(hand);
+
+        // Prevent action if the player is holding nothing or pressing shift
         if (heldItem.isEmpty() || player.isShiftKeyDown())
             return;
 
-        for (int i = 0; i < inventory.getContainerSize(); i++)
+        // Get the slot where the item is going to be added
+        ItemStack slotStack = inventory.getItem(0);
+        int maxStack = inventory.getMaxStackSize();
+
+        // If the slot is empty, add the held item to the slot
+        if (slotStack.isEmpty())
         {
-            ItemStack slotStack = inventory.getItem(i);
-
-            int maxStack = inventory.getMaxStackSize();
-            if (slotStack.isEmpty())
-            {
-                ItemStack newStack = heldItem.copy();
-                newStack.setCount(Math.min(heldItem.getCount(), maxStack));
-                inventory.setItem(i, newStack);
-                heldItem.shrink(newStack.getCount());
-
-                setChanged();
-                event.setCanceled(true);
-
-                return;
-            }
-
-            if (ItemStack.isSameItemSameTags(slotStack, heldItem) && slotStack.getCount() < maxStack)
-            {
-                int transferable = Math.min(heldItem.getCount(), maxStack - slotStack.getCount());
-                slotStack.grow(transferable);
-                heldItem.shrink(transferable);
-
-                setChanged();
-                event.setCanceled(true);
-
-                return;
-            }
+            ItemStack newStack = heldItem.copy();
+            newStack.setCount(Math.min(heldItem.getCount(), maxStack));
+            inventory.setItem(0, newStack);
+            heldItem.shrink(newStack.getCount());
+        }
+        else if (ItemStack.isSameItemSameTags(slotStack, heldItem) && slotStack.getCount() < maxStack)
+        {
+            // If the item is the same and we can stack them, add more to the existing stack
+            int transferable = Math.min(heldItem.getCount(), maxStack - slotStack.getCount());
+            slotStack.grow(transferable);
+            heldItem.shrink(transferable);
+        }
+        else
+        {
+            // Inventory is full or incompatible item, display message
+            if (!level.isClientSide())
+                player.displayClientMessage(Component.literal("Inventory is full!"), true);
         }
 
-        if (!level.isClientSide())
-            player.displayClientMessage(Component.literal("Inventory is full!"), true);
+        // Mark the block entity as changed
+        inventory.setChanged();
+        setChanged();
     }
 
     @Override
@@ -77,20 +77,25 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     {
         super.saveAdditional(tag);
 
+        // Create a new ListTag to store the item stack (even though there's only one item)
         ListTag inventoryList = new ListTag();
 
-        for (int i = 0; i < inventory.getContainerSize(); i++)
+        // Get the item stack from the barrel inventory
+        ItemStack stack = inventory.getItem(0);
+        if (!stack.isEmpty())
         {
-            ItemStack stack = inventory.getItem(i);
-            if (!stack.isEmpty())
-            {
-                CompoundTag itemTag = new CompoundTag();
-                stack.save(itemTag);
-                inventoryList.add(itemTag);
-            }
+            // Create a new tag to save the item stack data
+            CompoundTag itemTag = new CompoundTag();
+            stack.save(itemTag);
+
+            // Store the stack's count (this step might be redundant since the stack already contains the count)
+            itemTag.putInt("Count", stack.getCount());
+
+            // Add the itemTag to the inventory list (even though it only contains one item)
+            inventoryList.add(itemTag);
         }
 
-        //The nbt tag name must be unique, else if you use the same name on more than one block entity it will fail to save
+        // Put the inventory list into the tag
         tag.put("barrel_inventory", inventoryList);
 
         setChanged();
@@ -101,16 +106,22 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     {
         super.load(tag);
 
+        // Check if the "barrel_inventory" tag exists and is a list of compounds
         if (tag.contains("barrel_inventory", Tag.TAG_LIST))
         {
             ListTag inventoryList = tag.getList("barrel_inventory", Tag.TAG_COMPOUND);
 
-            // Loop through the loaded item list and restore them to the NonNullList
-            for (int i = 0; i < Math.min(inventoryList.size(), inventory.getContainerSize()); i++)
+            // Since we only have one item, we can directly access the first (and only) element
+            if (!inventoryList.isEmpty())
             {
-                CompoundTag itemTag = inventoryList.getCompound(i);
+                CompoundTag itemTag = inventoryList.getCompound(0);
                 ItemStack stack = ItemStack.of(itemTag);
-                inventory.setItem(i, stack);
+
+                // Restore the count of the item (in case it was modified outside of this method)
+                stack.setCount(itemTag.getInt("Count"));
+
+                // Set the item stack in the inventory (slot 0)
+                inventory.setItem(0, stack);
             }
         }
 
@@ -120,7 +131,7 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     @Override
     public Component getDisplayName()
     {
-        return Component.literal("Item Barrel");
+        return Component.literal("Barrel");
     }
 
     @Override
@@ -128,4 +139,32 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     {
         return new BarrelMenu(id, player_inventory, inventory);
     }
+
+    public ItemStack getDisplayedItem()
+    {
+        return inventory.getItem(0);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag()
+    {
+        var tag = super.getUpdateTag();
+        saveAdditional(tag);
+
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag)
+    {
+        super.handleUpdateTag(tag);
+    }
+
+    @Override
+    public void setChanged()
+    {
+        super.setChanged();
+        requestModelDataUpdate(); // Tell client to refresh rendering
+    }
+
 }

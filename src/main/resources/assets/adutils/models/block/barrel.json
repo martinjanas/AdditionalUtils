@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "adutils:block/barrel"
+    "down": "adutils:block/barrel",
+    "east": "adutils:block/barrel",
+    "north": "adutils:block/barrel",
+    "south": "adutils:block/barrel",
+    "up": "adutils:block/barrel",
+    "particle": "adutils:block/barrel",
+    "west": "adutils:block/barrel"
   }
 }

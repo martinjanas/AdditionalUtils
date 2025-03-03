@@ -1,16 +1,31 @@
 package additional_utils;
 
+import additional_utils.api.packet.ClientInventoryHandler;
+import additional_utils.api.packet.InventoryUpdatePacket;
+import additional_utils.block_entities.block_entity.BlockEntityBarrel;
+import additional_utils.block_entity_renderers.BlockBarrelRenderer;
 import additional_utils.menus.menu.barrel.BarrelScreen;
 import additional_utils.menus.menu.crafter.CrafterScreen;
 import additional_utils.registries.*;
 import additional_utils.registries.impl.ModRegistry;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -29,11 +44,54 @@ public class AdditionalUtils
         bus.addListener(this::common_setup);
         bus.addListener(this::client_setup);
         bus.addListener(this::OnRegisterScreens);
+        bus.addListener(this::OnRegisterPackets);
+        bus.addListener(this::OnRegisterBlockEntityRenderers);
 
         for (ModRegistry registry : mod_registries)
              registry.register(bus);
 
         //NeoForge.EVENT_BUS.register(EventManager.class);
+    }
+
+    public static void sendInventoryUpdate(ServerPlayer player)
+    {
+        InventoryUpdatePacket packet = new InventoryUpdatePacket(player.containerMenu.containerId, player.containerMenu.getItems());
+        PacketDistributor.PLAYER.with(player).send(packet);
+    }
+
+    public static void SendInventoryUpdate(ServerPlayer player)
+    {
+        int containerId = player.containerMenu.containerId;
+        int stateId = player.containerMenu.getStateId();
+        int slotIndex = 0; // Make sure this is a valid slot
+
+        var items = player.containerMenu.getItems();
+        if (slotIndex >= 0 && slotIndex < items.size())
+        {
+            ItemStack stack = items.get(slotIndex);
+
+            // Send the update packet to sync this slot
+            var packet = new ClientboundContainerSetSlotPacket(containerId, stateId, slotIndex, stack);
+            player.connection.send(packet);
+        }
+    }
+
+    private static void handleClient(InventoryUpdatePacket packet, PlayPayloadContext context)
+    {
+        context.workHandler().execute(() -> ClientInventoryHandler.handleInventoryUpdate(packet));
+    }
+
+    @SubscribeEvent
+    private void OnRegisterPackets(RegisterPayloadHandlerEvent event)
+    {
+        event.registrar(AdditionalUtils.MOD_ID).play(InventoryUpdatePacket.ID, InventoryUpdatePacket::new,
+                (packet, context) -> handleClient(packet, context));
+    }
+
+    @SubscribeEvent
+    private void OnRegisterCapabilities(RegisterCapabilitiesEvent event)
+    {
+        //event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.barrel.get(), (be, side) -> be.getItemHandler(side));
     }
 
     @SuppressWarnings("unused")
@@ -47,6 +105,12 @@ public class AdditionalUtils
     private void client_setup(final FMLClientSetupEvent event)
     {
 
+    }
+
+    @SubscribeEvent
+    public void OnRegisterBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
+    {
+        event.registerBlockEntityRenderer(BlockEntityRegistry.barrel.get(), BlockBarrelRenderer::new);
     }
 
     private void common_setup(final FMLCommonSetupEvent event)
