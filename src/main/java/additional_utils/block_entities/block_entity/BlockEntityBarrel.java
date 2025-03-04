@@ -1,9 +1,11 @@
 package additional_utils.block_entities.block_entity;
 
+import additional_utils.AdditionalUtils;
 import additional_utils.api.inventory_containers.BarrelContainer;
 import additional_utils.menus.menu.barrel.BarrelMenu;
 import additional_utils.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -12,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,6 +25,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +46,8 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
                 level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     };
+
+    public static final BlockCapability<IItemHandler, @Nullable Direction> item_handler = BlockCapability.create(new ResourceLocation(AdditionalUtils.MOD_ID, "item_handler"), IItemHandler.class, Direction.class);
 
     public BlockEntityBarrel(BlockPos pPos, BlockState pBlockState)
     {
@@ -195,5 +202,17 @@ public class BlockEntityBarrel extends BlockEntity implements MenuProvider
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
         super.onDataPacket(net, pkt);
+    }
+
+    public @Nullable IItemHandler getItemHandler(@Nullable Direction side)
+    {
+        return inventory;
+        //return item_handler.getCapability(getLevel(), getBlockPos(), getBlockState(), this, side);
+    }
+
+    @Override
+    public void invalidateCapabilities()
+    {
+        super.invalidateCapabilities();
     }
 }

@@ -3,6 +3,7 @@ package additional_utils.registries;
 import additional_utils.AdditionalUtils;
 import additional_utils.blocks.block.BlockBarrel;
 import additional_utils.blocks.block.BlockCrafter;
+import additional_utils.blocks.block.BlockGenerator;
 import additional_utils.blocks.block.BlockHealer;
 import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +20,7 @@ public class BlockRegistry implements ModRegistry
     public static DeferredBlock<Block> healer;
     public static DeferredBlock<Block> crafter;
     public static DeferredBlock<Block> barrel;
+    public static DeferredBlock<Block> generator;
 
     @Override
     public void register(IEventBus bus)
@@ -26,6 +28,7 @@ public class BlockRegistry implements ModRegistry
         healer = blocks.register("healer", () -> new BlockHealer(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
         crafter = blocks.register("crafter", () -> new BlockCrafter(BlockBehaviour.Properties.of().strength(50f, 1200f)));
         barrel = blocks.register("barrel", () -> new BlockBarrel(BlockBehaviour.Properties.of().strength(1f, 1200f)));
+        generator = blocks.register("generator", () -> new BlockGenerator(BlockBehaviour.Properties.of().strength(1f, 1200f)));
 
         blocks.register(bus);
     }

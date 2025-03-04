@@ -46,6 +46,7 @@ public class AdditionalUtils
         bus.addListener(this::OnRegisterScreens);
         bus.addListener(this::OnRegisterPackets);
         bus.addListener(this::OnRegisterBlockEntityRenderers);
+        bus.addListener(this::OnRegisterCapabilities);
 
         for (ModRegistry registry : mod_registries)
              registry.register(bus);
@@ -91,7 +92,9 @@ public class AdditionalUtils
     @SubscribeEvent
     private void OnRegisterCapabilities(RegisterCapabilitiesEvent event)
     {
-        //event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.barrel.get(), (be, side) -> be.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BlockEntityRegistry.barrel.get(), (be, side) -> be.getItemHandler(side));
+
+        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK, BlockEntityRegistry.generator.get(), (be, side) -> be.energy);
     }
 
     @SuppressWarnings("unused")
