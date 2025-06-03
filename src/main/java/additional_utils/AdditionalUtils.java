@@ -6,12 +6,16 @@ import additional_utils.block_entities.block_entity.BlockEntityBarrel;
 import additional_utils.block_entity_renderers.BlockBarrelRenderer;
 import additional_utils.menus.menu.barrel.BarrelScreen;
 import additional_utils.menus.menu.crafter.CrafterScreen;
+import additional_utils.menus.menu.generator.GeneratorScreen;
 import additional_utils.registries.*;
 import additional_utils.registries.impl.ModRegistry;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,6 +26,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
@@ -29,6 +35,7 @@ import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.Random;
 
 @Mod(AdditionalUtils.MOD_ID)
 public class AdditionalUtils
@@ -103,6 +110,7 @@ public class AdditionalUtils
     {
         event.register(MenuRegistry.crafter_menu.get(), CrafterScreen::new);
         event.register(MenuRegistry.barrel_menu.get(), BarrelScreen::new);
+        event.register(MenuRegistry.generator_menu.get(), GeneratorScreen::new);
     }
 
     private void client_setup(final FMLClientSetupEvent event)

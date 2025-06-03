@@ -1,0 +1,21 @@
+{
+  "texture_size": [64, 64],
+  "textures": {
+    "0": "adutils:block/multiblock",
+    "particle": "adutils:block/multiblock"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [32, 16, 16],
+      "faces": {
+        "north": {"uv": [0, 0, 8, 4], "texture": "#0"},
+        "east": {"uv": [8, 4, 12, 8], "texture": "#0"},
+        "south": {"uv": [0, 4, 8, 8], "texture": "#0"},
+        "west": {"uv": [8, 8, 12, 12], "texture": "#0"},
+        "up": {"uv": [0, 0, 0, 16], "texture": "#0"},
+        "down": {"uv": [0, 0, 0, 16], "texture": "#0"}
+      }
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import additional_utils.block_entities.block_entity.BlockEntityGenerator;
 import additional_utils.registries.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -34,9 +35,19 @@ public class BlockGenerator extends Block implements EntityBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(BlockState block_state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return super.use(state, level, pos, player, hand, hit);
+        if (level.isClientSide())
+            return InteractionResult.SUCCESS; // Return SUCCESS instead of FAIL
+
+        if (player instanceof ServerPlayer serverPlayer)
+        {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof BlockEntityGenerator generator)
+                serverPlayer.openMenu(generator, buf -> buf.writeBlockPos(pos));
+        }
+
+        return InteractionResult.CONSUME;
     }
 
     @Override

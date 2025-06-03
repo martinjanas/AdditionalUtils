@@ -13,6 +13,7 @@ public class BlockItemRegistry implements ModRegistry
     public static DeferredItem<BlockItem> crafter;
     public static DeferredItem<BlockItem> barrel;
     public static DeferredItem<BlockItem> generator;
+    public static DeferredItem<BlockItem> multiblock;
 
     @Override
     public void register(IEventBus bus)
@@ -23,5 +24,6 @@ public class BlockItemRegistry implements ModRegistry
         crafter = items.registerSimpleBlockItem("crafter", BlockRegistry.crafter);
         barrel = items.registerSimpleBlockItem("barrel", BlockRegistry.barrel);
         generator = items.registerSimpleBlockItem("generator", BlockRegistry.generator);
+        multiblock = items.registerSimpleBlockItem("multiblock", BlockRegistry.multiblock);
     }
 }

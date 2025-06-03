@@ -1,10 +1,7 @@
 package additional_utils.registries;
 
 import additional_utils.AdditionalUtils;
-import additional_utils.blocks.block.BlockBarrel;
-import additional_utils.blocks.block.BlockCrafter;
-import additional_utils.blocks.block.BlockGenerator;
-import additional_utils.blocks.block.BlockHealer;
+import additional_utils.blocks.block.*;
 import additional_utils.registries.impl.ModRegistry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -21,6 +18,7 @@ public class BlockRegistry implements ModRegistry
     public static DeferredBlock<Block> crafter;
     public static DeferredBlock<Block> barrel;
     public static DeferredBlock<Block> generator;
+    public static DeferredBlock<Block> multiblock;
 
     @Override
     public void register(IEventBus bus)
@@ -29,6 +27,7 @@ public class BlockRegistry implements ModRegistry
         crafter = blocks.register("crafter", () -> new BlockCrafter(BlockBehaviour.Properties.of().strength(50f, 1200f)));
         barrel = blocks.register("barrel", () -> new BlockBarrel(BlockBehaviour.Properties.of().strength(1f, 1200f)));
         generator = blocks.register("generator", () -> new BlockGenerator(BlockBehaviour.Properties.of().strength(1f, 1200f)));
+        multiblock = blocks.register("multiblock", () -> new BlockMultiBlock(BlockBehaviour.Properties.of().strength(1f, 1200f)));
 
         blocks.register(bus);
     }
