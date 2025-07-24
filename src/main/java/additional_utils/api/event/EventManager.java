@@ -3,19 +3,27 @@ package additional_utils.api.event;
 import additional_utils.AdditionalUtils;
 import additional_utils.block_entities.block_entity.BlockEntityBarrel;
 import additional_utils.items.item.ItemSolidifiedXP;
+import additional_utils.registries.EnchantmentRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
@@ -127,6 +135,68 @@ public class EventManager
         }
     }
 
+    private static final TagKey<Item> LOGS_TAG = ItemTags.create(new ResourceLocation("minecraft", "logs"));
+
+    public static boolean playerHasAnyLog(Player player)
+    {
+        // Check main hand and offhand
+        if (isLog(player.getMainHandItem()))
+            return true;
+
+        if (isLog(player.getOffhandItem()))
+            return true;
+
+        // Check inventory items
+        for (ItemStack stack : player.getInventory().items)
+        {
+            if (isLog(stack))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isLog(ItemStack stack)
+    {
+        return !stack.isEmpty() && stack.is(LOGS_TAG);
+    }
+
+    static void destroy_blocks(TickEvent.PlayerTickEvent event)
+    {
+        Player player = event.player;
+        if (player.level().isClientSide || !player.onGround())
+            return;
+
+        ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
+        int enchantLevel = boots.getEnchantmentLevel(EnchantmentRegistry.BOOT_MAGIC.get());
+        if (enchantLevel <= 0)
+            return;
+
+        BlockPos playerPos = player.blockPosition();
+        double playerFeetY = player.getY() - (int) player.getY();
+        if (playerFeetY > 0.1)
+            return;
+
+        if (enchantLevel == 69 && playerHasAnyLog(player))
+        {
+            BlockPos blockBelow = playerPos.below();
+            BlockState state = player.level().getBlockState(blockBelow);
+
+            if (!state.isAir() && state.getDestroySpeed(player.level(), blockBelow) >= 0)
+                player.level().destroyBlock(blockBelow, true, player);
+        }
+        else if (enchantLevel < 5)
+        {
+            BlockPos blockBelow = playerPos.below();
+            BlockState state = player.level().getBlockState(blockBelow);
+
+            if (!state.isAir() && state.getDestroySpeed(player.level(), blockBelow) >= 0)
+                player.level().destroyBlock(blockBelow, true, player);
+        }
+        else if (enchantLevel == 5)
+            player.level().explode(player, player.getX(), player.getY(), player.getZ(), 0.5f, Level.ExplosionInteraction.BLOCK);
+    }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
@@ -136,5 +206,7 @@ public class EventManager
 //                serverPlayer.sendSystemMessage(Component.literal("You feel like someone is watching you..."));
 //            }
 //        }
+
+        destroy_blocks(event);
     }
 }

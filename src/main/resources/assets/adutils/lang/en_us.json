@@ -3,5 +3,6 @@
   "block.adutils.healer": "Healer",
   "block.adutils.crafter": "Crafter",
   "block.adutils.barrel": "Barrel",
-  "itemGroup.au_creative_tab": "Additional Utils"
+  "itemGroup.au_creative_tab": "Additional Utils",
+  "enchantment.adutils.boot_magic": "Efficiency??!"
 }

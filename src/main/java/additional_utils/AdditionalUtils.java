@@ -46,7 +46,7 @@ public class AdditionalUtils
     public AdditionalUtils(IEventBus bus)
     {
         List<ModRegistry> mod_registries = List.of(new ItemRegistry(), new BlockRegistry(), new BlockItemRegistry(),
-                new BlockEntityRegistry(), new CreativeTabRegistry(), new MenuRegistry(), new RecipeRegistry());
+                new BlockEntityRegistry(), new CreativeTabRegistry(), new MenuRegistry(), new RecipeRegistry(), new EnchantmentRegistry());
 
         bus.addListener(this::common_setup);
         bus.addListener(this::client_setup);
